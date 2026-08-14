@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Methodenkarten – Definitionen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { text-wrap: pretty; box-sizing: border-box; }
+  body { margin: 0; background: oklch(94% 0.005 60); font-family: 'Helvetica Neue', Arial, sans-serif; }
+  a { color: oklch(60% 0.15 30); }
+  a:hover { color: oklch(50% 0.15 30); }
+  #tabbar { position: sticky; top: 0; z-index: 10; background: oklch(94% 0.005 60); border-bottom: 1px solid oklch(85% 0.01 60); padding: 12px 24px; display: flex; align-items: center; gap: 8px; overflow-x: auto; }
+  #overviewBtn { flex: 0 0 auto; padding: 8px 14px; border-radius: 6px; border: 1px solid oklch(60% 0.15 30); background: oklch(60% 0.15 30); color: white; font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 13px; cursor: pointer; white-space: nowrap; }
+  #tabbar-sep { flex: 0 0 auto; width: 1px; height: 20px; background: oklch(85% 0.01 60); }
+  #overview { max-width: 1000px; margin: 40px auto; padding: 0 24px; }
+  #overview h1 { font-family: Georgia, serif; font-weight: 400; font-size: 34px; margin: 0 0 8px; }
+  #overview p.sub { font-size: 15px; color: oklch(45% 0.02 60); margin: 0 0 32px; }
+  #overview .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card-btn:hover { border-color: oklch(60% 0.15 30) !important; }
+  #stage { max-width: 1000px; margin: 24px auto 0; }
+  .page { box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  #navbar { max-width: 1000px; margin: 16px auto 40px; display: none; justify-content: space-between; align-items: center; padding: 0 8px; }
+  #navbar button { padding: 10px 20px; border-radius: 6px; border: 1px solid oklch(85% 0.01 60); background: oklch(98.5% 0.006 60); font-size: 15px; cursor: pointer; }
+  #navbar button:disabled { opacity: 0.4; cursor: default; }
+  #counter { font-size: 14px; color: oklch(45% 0.02 60); }
+  @media print {
+    #tabbar, #navbar, #overview { display: none; }
+    body { background: white; }
+    .page { display: block !important; box-shadow: none; page-break-after: always; }
+  }
+  @media (max-width: 700px) { #overview .grid { grid-template-columns: 1fr; } }
+  #sdg-topbar { position: fixed; top: 0; left: 0; right: 0; height: 6px; display: flex; z-index: 20; }
+  #sdg-topbar span { flex: 1 1 0; }
+  #sdg-bg { position: fixed; inset: 0; z-index: -1; display: flex; opacity: 0.05; pointer-events: none; }
+  #sdg-bg span { flex: 1 1 0; }
+  @media print { #sdg-topbar, #sdg-bg { display: none; } }
+</style>
+</head>
+<body>
+<div id="sdg-topbar"></div>
+<div id="sdg-bg"></div>
+<div id="tabbar" style="margin-top:6px;">
+  <button id="overviewBtn" onclick="showOverview()">Übersicht</button>
+  <div id="tabbar-sep"></div>
+      <button class="tab-btn" data-idx="pitch" onclick="showPage('pitch')" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:2px solid oklch(58% 0.19 300);background:oklch(96% 0.03 300);color:oklch(40% 0.19 300);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;" title="Pitch">Pitch</button>
+      <button class="tab-btn" data-idx="0" onclick="showPage(0)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Collage">01</button>
+      <button class="tab-btn" data-idx="1" onclick="showPage(1)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Concept Map + Fachgespräch">02</button>
+      <button class="tab-btn" data-idx="2" onclick="showPage(2)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Elevator Pitch">03</button>
+      <button class="tab-btn" data-idx="3" onclick="showPage(3)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Erklärvideo">04</button>
+      <button class="tab-btn" data-idx="4" onclick="showPage(4)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Fishbowl-Diskussion">05</button>
+      <button class="tab-btn" data-idx="5" onclick="showPage(5)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Hot Seat-Diskussion">06</button>
+      <button class="tab-btn" data-idx="6" onclick="showPage(6)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Infografik / Poster">07</button>
+      <button class="tab-btn" data-idx="7" onclick="showPage(7)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Lapbook">08</button>
+      <button class="tab-btn" data-idx="8" onclick="showPage(8)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Lernvideo-Tutorial">09</button>
+      <button class="tab-btn" data-idx="9" onclick="showPage(9)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Modell">10</button>
+      <button class="tab-btn" data-idx="10" onclick="showPage(10)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Offener Brief">11</button>
+      <button class="tab-btn" data-idx="11" onclick="showPage(11)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Podcast">12</button>
+      <button class="tab-btn" data-idx="12" onclick="showPage(12)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Poetry Slam">13</button>
+      <button class="tab-btn" data-idx="13" onclick="showPage(13)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Präsentation">14</button>
+      <button class="tab-btn" data-idx="14" onclick="showPage(14)" style="flex:0 0 auto;padding:8px 14px;border-radius:6px;border:1px solid oklch(85% 0.01 60);background:oklch(98.5% 0.006 60);color:oklch(30% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;cursor:pointer;white-space:nowrap;" title="Talkshow / Simulation">15</button>
+</div>
+<div id="overview">
+  <a href="index.html" style="display:inline-block;margin-bottom:20px;font-size:14px;">&larr; Übersicht</a>
+  <h1>Methodenkarten – Definitionen</h1>
+  <p class="sub">15 Methoden auf einen Blick, plus der verpflichtende Pitch. Karte anklicken für die vollständige Definition und das Bewertungsraster.</p>
+  <div class="grid">
+      <button class="card-btn" onclick="showPage(0)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">01</span>
+        <span style="font-size:19px;font-weight:700;">Collage</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">künstlerische Technik: unterschiedliche Materialien werden zu einem neuen Gesamtbild zusammengefügt</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(1)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">02</span>
+        <span style="font-size:19px;font-weight:700;">Concept Map + Fachgespräch</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">grafische Darstellung von Begriffen und ihren Beziehungen</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(2)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">03</span>
+        <span style="font-size:19px;font-weight:700;">Elevator Pitch</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">sehr kurze, überzeugende Präsentation einer Idee oder eines Produkts</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(3)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">04</span>
+        <span style="font-size:19px;font-weight:700;">Erklärvideo</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">kurzes Video, das ein Thema oder Konzept verständlich erklärt</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(4)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">05</span>
+        <span style="font-size:19px;font-weight:700;">Fishbowl-Diskussion</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">Diskussionsform mit innerem und äußerem Kreis</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(5)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">06</span>
+        <span style="font-size:19px;font-weight:700;">Hot Seat-Diskussion</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">eine Person sitzt im „heißen Stuhl“ und wird von der Gruppe befragt</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(6)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">07</span>
+        <span style="font-size:19px;font-weight:700;">Infografik / Poster</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">visuelle Darstellung von Informationen oder Daten</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(7)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">08</span>
+        <span style="font-size:19px;font-weight:700;">Lapbook</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">gefaltetes Papierheft mit aufklappbaren Taschen, Klappen und Minibüchern zu einem Thema</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(8)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">09</span>
+        <span style="font-size:19px;font-weight:700;">Lernvideo-Tutorial</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">Video, das Schritt für Schritt zeigt, wie man etwas macht</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(9)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">10</span>
+        <span style="font-size:19px;font-weight:700;">Modell</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">dreidimensionale, vereinfachte Nachbildung eines Objekts, Systems oder Sachverhalts</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(10)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">11</span>
+        <span style="font-size:19px;font-weight:700;">Offener Brief</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">Brief an eine bestimmte Person oder Institution, aber bewusst veröffentlicht</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(11)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">12</span>
+        <span style="font-size:19px;font-weight:700;">Podcast</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">Audiobeitrag zum Anhören – manchmal ergänzt durch Video</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(12)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">13</span>
+        <span style="font-size:19px;font-weight:700;">Poetry Slam</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">Wettbewerb im lauten Vortragen selbstgeschriebener Texte</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(13)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">14</span>
+        <span style="font-size:19px;font-weight:700;">Präsentation</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">mündlicher Vortrag zu einem fachlichen Thema, meist mit visueller Unterstützung (Folien, Plakat)</span>
+      </button>
+
+      <button class="card-btn" onclick="showPage(14)" style="text-align:left;cursor:pointer;background:oklch(98.5% 0.006 60);border:1px solid oklch(88% 0.01 60);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;">
+        <span style="font-family:Georgia,serif;font-size:15px;color:oklch(60% 0.15 30);">15</span>
+        <span style="font-size:19px;font-weight:700;">Talkshow / Simulation</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">Nachspielen einer Situation in verteilten Rollen</span>
+      </button>
+      <button class="card-btn" onclick="showPage('pitch')" style="text-align:left;cursor:pointer;background:oklch(96% 0.03 300);border:2px solid oklch(58% 0.19 300);border-radius:10px;padding:20px 22px;font-family:'Helvetica Neue',Arial,sans-serif;color:oklch(22% 0.01 60);display:flex;flex-direction:column;gap:8px;grid-column:1 / -1;">
+        <span style="font-size:19px;font-weight:700;color:oklch(40% 0.19 300);">Pitch — Verpflichtend beim Projektleuchten/Marktplatz</span>
+        <span style="font-size:14px;line-height:1.5;color:oklch(45% 0.02 60);">sehr kurze, überzeugende Präsentation einer Idee oder eines Produkts</span>
+      </button>
+  </div>
+</div>
+<div id="stage">
+
+  <section class="page" data-idx="pitch" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;border-top:6px solid oklch(58% 0.19 300);">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;border-bottom:3px solid oklch(58% 0.19 300);padding-bottom:20px;margin-bottom:36px;">
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;color:oklch(58% 0.19 300);">Pitch</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Verpflichtend beim Projektleuchten/Marktplatz</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(58% 0.19 300);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>sehr kurze, überzeugende Präsentation einer Idee oder eines Produkts</li>
+          <li>dauert nur 30 bis 60 Sekunden – Zeit einer Fahrstuhlfahrt</li>
+          <li>Ziel: Interesse wecken, nicht alles erklären</li>
+          <li>klar, prägnant, auf den Punkt gebracht</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(58% 0.19 300);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Aufhänger / Problem</li>
+          <li>Idee / Lösung</li>
+          <li>Nutzen</li>
+          <li>Call to Action</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(58% 0.19 300);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>kurz</li>
+          <li>frei gesprochen</li>
+          <li>überzeugend</li>
+          <li>ohne Fachjargon</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Ein Pitch überzeugt in der Zeit einer Aufzugfahrt.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Mündlich · KI-Nutzung: Nein · Dauer/Umfang: 3–5 Min. · Sozialform: Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Ein prägnanter Kurzvortrag, der eine Lösung oder Idee überzeugend und komprimiert darstellt. Eigene Leistung – kein KI-Einsatz während der Prüfung.</div>
+      <a href="raster/03-elevator-pitch.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(58% 0.19 300);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="0" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">01</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Collage</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>künstlerische Technik: unterschiedliche Materialien werden zu einem neuen Gesamtbild zusammengefügt</li>
+          <li>kombiniert vorhandenes Material – Bilder, Texte, Fundstücke – auf neue Weise</li>
+          <li>kann ein Thema visuell verdichten oder mehrere Perspektiven nebeneinanderstellen</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Materialsammlung: Bilder, Texte, Objekte</li>
+          <li>Anordnung und Komposition auf einer Fläche</li>
+          <li>Verkleben und Fixieren des Ergebnisses</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>kombiniert statt zeichnet</li>
+          <li>unterschiedliche Materialien und Texturen</li>
+          <li>oft überraschende Bezüge zwischen Elementen</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Eine Collage erzählt durch die Kombination vorhandener Teile eine neue Geschichte.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Visuell · KI-Nutzung: Optional (mit KI-Logbuch) · Dauer/Umfang: DIN A2/A3 · Sozialform: Gruppe oder Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Schülerinnen und Schüler setzen ein fachliches Thema als Collage aus unterschiedlichen Materialien um und erläutern ihre Gestaltung in einem kurzen Gespräch. KI optional, mit Logbuch.</div>
+      <a href="raster/12-collage.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="1" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">02</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Concept Map + Fachgespräch</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>grafische Darstellung von Begriffen und ihren Beziehungen</li>
+          <li>dient als Grundlage für ein mündliches Fachgespräch</li>
+          <li>zeigt Zusammenhänge, Ober- und Unterbegriffe, Ursache-Wirkung</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau der Concept Map</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>zentrale Begriffe</li>
+          <li>Verbindungslinien mit Beschriftung</li>
+          <li>hierarchische oder vernetzte Struktur</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Fachgespräch</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Erläuterung der Map</li>
+          <li>Rückfragen</li>
+          <li>Vertiefung einzelner Zusammenhänge</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Die Concept Map macht Denken sichtbar, das Fachgespräch prüft das Verständnis.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Mündlich-visuell · KI-Nutzung: Nein · Dauer/Umfang: 10–15 Min. · Sozialform: Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Schülerinnen und Schüler erstellen eine Concept Map zu einem Fachgebiet und erläutern diese im Einzelgespräch. Kein KI-Einsatz.</div>
+      <a href="raster/08-concept-map-fachgespraech.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="2" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">03</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Elevator Pitch</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>sehr kurze, überzeugende Präsentation einer Idee oder eines Produkts</li>
+          <li>dauert nur 30 bis 60 Sekunden – Zeit einer Fahrstuhlfahrt</li>
+          <li>Ziel: Interesse wecken, nicht alles erklären</li>
+          <li>klar, prägnant, auf den Punkt gebracht</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Aufhänger / Problem</li>
+          <li>Idee / Lösung</li>
+          <li>Nutzen</li>
+          <li>Call to Action</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>kurz</li>
+          <li>frei gesprochen</li>
+          <li>überzeugend</li>
+          <li>ohne Fachjargon</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Ein Elevator Pitch überzeugt in der Zeit einer Aufzugfahrt.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Mündlich · KI-Nutzung: Nein · Dauer/Umfang: 3–5 Min. · Sozialform: Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Ein prägnanter Kurzvortrag, der eine Lösung oder Idee überzeugend und komprimiert darstellt. Eigene Leistung – kein KI-Einsatz während der Prüfung.</div>
+      <a href="raster/03-elevator-pitch.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="3" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">04</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Erklärvideo</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>kurzes Video, das ein Thema oder Konzept verständlich erklärt</li>
+          <li>meist mit Sprecherstimme, Bildern, Animationen oder Diagrammen</li>
+          <li>gedacht für Selbststudium oder Wiederholung</li>
+          <li>meist 2 bis 8 Minuten lang</li>
+          <li>kann live gefilmt oder als Bildschirmaufnahme entstehen</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Einstieg: Problem oder Frage</li>
+          <li>Erklärung Schritt für Schritt</li>
+          <li>Zusammenfassung / Fazit</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Typische Mittel</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Bildschirmaufnahme (Screencast)</li>
+          <li>Zeichnungen / Legetechnik</li>
+          <li>Animation</li>
+          <li>Text-Einblendungen</li>
+          <li>Musik / Soundeffekte</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Ein Erklärvideo zeigt in kurzer Zeit, wie etwas funktioniert oder warum etwas so ist.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Medienprodukt · KI-Nutzung: Ja (mit KI-Logbuch) · Dauer/Umfang: 5–10 Min. · Sozialform: Gruppe oder Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Eine visuelle Erklärung eines Begriffs oder Prozesses als Screencast, gezeichnetes Video oder Stop-Motion. KI-Nutzung möglich und wird mit KI-Logbuch nachgewiesen.</div>
+      <a href="raster/02-erklaervideo.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="4" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">05</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Fishbowl-Diskussion</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Diskussionsform mit innerem und äußerem Kreis</li>
+          <li>im Innenkreis diskutieren wenige aktiv, der Außenkreis hört zu und beobachtet</li>
+          <li>ein freier Stuhl im Innenkreis erlaubt Zuhörenden zum Einsteigen</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Ablauf</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Innenkreis diskutiert das Thema</li>
+          <li>Außenkreis beobachtet und macht Notizen</li>
+          <li>Wechsel über den freien Stuhl möglich</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Rollen</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Diskutierende (Innenkreis)</li>
+          <li>Beobachtende (Außenkreis)</li>
+          <li>ggf. Moderation</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Im Fishbowl kann jeder von außen jederzeit nach innen wechseln.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Mündlich-szenisch · KI-Nutzung: Nein · Dauer/Umfang: 20–30 Min. · Sozialform: Gruppe</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Strukturierte Diskussionsform: Ein innerer Kreis diskutiert, der äußere beobachtet. Rollen wechseln. Eigene Leistung – kein KI-Einsatz.</div>
+      <a href="raster/11-fishbowl-diskussion.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="5" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">06</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Hot Seat-Diskussion</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>eine Person sitzt im „heißen Stuhl“ und wird von der Gruppe befragt</li>
+          <li>meist in einer Rolle: Experte, historische Figur, kontroverse Position</li>
+          <li>Ziel: eine Perspektive vertreten und verteidigen</li>
+          <li>fördert Argumentation und Spontanität</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Ablauf</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Vorbereitung der Rolle</li>
+          <li>Befragung durch die Gruppe</li>
+          <li>Reflexion im Anschluss</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Regeln</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>sachlich bleiben</li>
+          <li>Rolle konsequent vertreten</li>
+          <li>Fragen begründen</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Im Hot Seat steht eine Position im Kreuzfeuer der Fragen.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Mündlich · KI-Nutzung: Nein · Dauer/Umfang: 15–20 Min. · Sozialform: Gruppe</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Eine Person sitzt im heißen Stuhl und wird von der Gruppe zu einer Rolle oder Position befragt. Eigene Leistung – kein KI-Einsatz während der Prüfung.</div>
+      <a href="raster/04-hot-seat-diskussion.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="6" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">07</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Infografik / Poster</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>visuelle Darstellung von Informationen oder Daten</li>
+          <li>kombiniert Text, Bilder, Diagramme, Icons</li>
+          <li>reduziert komplexe Inhalte auf das Wesentliche</li>
+          <li>ermöglicht einen schnellen Überblick auf einen Blick</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Titel / Kernaussage</li>
+          <li>Hauptinformation: Zahlen, Fakten, Prozess</li>
+          <li>visuelle Elemente: Diagramme, Icons, Farben</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Gestaltungsprinzipien</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>klare Hierarchie</li>
+          <li>wenig Text</li>
+          <li>konsistente Farben und Symbole</li>
+          <li>erkennbarer Lesefluss</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Eine Infografik erklärt auf einen Blick, was ein Fließtext in vielen Sätzen bräuchte.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Visuell · KI-Nutzung: Ja (mit KI-Logbuch) · Dauer/Umfang: DIN A1/A2 · Sozialform: Gruppe oder Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Visuelle Aufbereitung fachlicher Zusammenhänge, ergänzt durch ein kurzes Standdiskussionsgespräch. KI-Nutzung wird explizit mitbewertet.</div>
+      <a href="raster/07-infografik-poster.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="7" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">08</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Lapbook</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>gefaltetes Papierheft mit aufklappbaren Taschen, Klappen und Minibüchern zu einem Thema</li>
+          <li>kombiniert Sammeln, Gestalten und Präsentieren von Inhalten</li>
+          <li>entsteht meist im Laufe einer längeren Recherche- oder Lernphase</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Grundgerüst falten: Faltmappe</li>
+          <li>Elemente gestalten: Klappen, Taschen, Minibücher</li>
+          <li>Inhalte einordnen und beschriften</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>interaktiv zum Aufklappen</li>
+          <li>kombiniert Text und Bild</li>
+          <li>individuell gestaltbar</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Ein Lapbook macht Wissen zum Anfassen und Aufklappen.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Schriftlich-visuell · KI-Nutzung: Optional (mit KI-Logbuch) · Dauer/Umfang: DIN A3 gefaltet · Sozialform: Einzel oder Gruppe</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Schülerinnen und Schüler dokumentieren ein fachliches Thema in einem Lapbook mit Klappen, Taschen und Minibüchern. KI optional, mit Logbuch.</div>
+      <a href="raster/14-lapbook.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="8" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">09</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Lernvideo-Tutorial</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Video, das Schritt für Schritt zeigt, wie man etwas macht</li>
+          <li>praxisorientiert, oft mit Bildschirmaufnahme oder Kamera</li>
+          <li>zum Nachmachen gedacht</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Ziel / Ergebnis vorstellen</li>
+          <li>Schritt-für-Schritt-Anleitung</li>
+          <li>Ergebnis / Zusammenfassung</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>klare Sprache</li>
+          <li>sichtbare Handlungsschritte</li>
+          <li>Tempo zum Mitmachen</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Ein Tutorial führt Schritt für Schritt zum Ergebnis.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Medienprodukt · KI-Nutzung: Ja (mit KI-Logbuch) · Dauer/Umfang: 8–15 Min. · Sozialform: Gruppe</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Eine Gruppe erklärt Schritt für Schritt einen fachlichen Prozess oder eine Methode als Tutorial. KI mit Logbuch erlaubt.</div>
+      <a href="raster/09-lernvideo-tutorial.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="9" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">10</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Modell</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>dreidimensionale, vereinfachte Nachbildung eines Objekts, Systems oder Sachverhalts</li>
+          <li>macht Aufbau, Funktion oder Größenverhältnisse anschaulich</li>
+          <li>reduziert die Wirklichkeit auf wesentliche Merkmale</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Planung: Maßstab, Material, Aufbau</li>
+          <li>Bau des Modells</li>
+          <li>Erläuterung von Funktion und Zweck</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>maßstabsgetreu oder vereinfacht</li>
+          <li>greifbar und anschaulich</li>
+          <li>zeigt Struktur oder Funktionsweise</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Ein Modell macht durch Vereinfachung sichtbar, was in der Wirklichkeit oft verborgen bleibt.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Gegenständlich · KI-Nutzung: Optional (mit KI-Logbuch) · Dauer/Umfang: nach Absprache · Sozialform: Gruppe oder Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Schülerinnen und Schüler bauen ein Modell zu einem fachlichen Sachverhalt und erläutern Aufbau und Funktion im Gespräch. KI optional (z. B. Recherche), mit Logbuch.</div>
+      <a href="raster/13-modell.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="10" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">11</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Offener Brief</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Brief an eine bestimmte Person oder Institution, aber bewusst veröffentlicht</li>
+          <li>behandelt ein Thema von öffentlichem Interesse</li>
+          <li>vertritt eine klare Position</li>
+          <li>nutzt Argumente und persönliche Anrede</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Anrede</li>
+          <li>Anlass / Problem</li>
+          <li>Argumentation</li>
+          <li>Forderung / Appell</li>
+          <li>Schlussformel</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>sachlich-appellativ</li>
+          <li>klare Haltung</li>
+          <li>an die Öffentlichkeit gerichtet</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Ein offener Brief macht eine private Botschaft öffentlich.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Schriftlich · KI-Nutzung: Optional (mit KI-Logbuch) · Dauer/Umfang: 1–2 Seiten · Sozialform: Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Schülerinnen und Schüler verfassen einen offenen Brief zu einem fachbezogenen Thema. KI optional, mit Logbuch. Einzelleistung.</div>
+      <a href="raster/06-offener-brief.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="11" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">12</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Podcast</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Audiobeitrag zum Anhören – manchmal ergänzt durch Video</li>
+          <li>erscheint als Serie, in einzelnen Episoden (Folgen)</li>
+          <li>Thema kann fest sein oder von Folge zu Folge wechseln</li>
+          <li>wird über das Internet verbreitet, meist kostenlos</li>
+          <li>man kann Podcasts abonnieren – neue Folgen laden automatisch nach</li>
+          <li>keine feste Länge, oft zwischen 10 und 60 Minuten</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau einer Folge</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Anmoderation: Begrüßung, Thema, Vorschau</li>
+          <li>Hauptteil: Interview, Gespräch, Reportage oder Erzählung</li>
+          <li>Abmoderation: Zusammenfassung, Verabschiedung, Ausblick</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Typische Formate</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Interview</li>
+          <li>Gespräch / Diskussion</li>
+          <li>Reportage</li>
+          <li>Erzählung / Hörspiel</li>
+          <li>Feature (recherchiert, montiert)</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Ein Podcast ist wie eine Radiosendung, die man sich aussuchen und jederzeit anhören kann.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Medienprodukt · KI-Nutzung: Ja (mit KI-Logbuch) · Dauer/Umfang: 15–20 Min. · Sozialform: Gruppe oder Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Schülerinnen und Schüler erstellen eine Podcast-Episode zu einem fachlichen Thema. Bei KI-Nutzung wird ein KI-Logbuch geführt (dokumentiert Prompts, KI-Output, eigene Überarbeitungen).</div>
+      <a href="raster/01-podcast.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="12" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">13</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Poetry Slam</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Wettbewerb im lauten Vortragen selbstgeschriebener Texte</li>
+          <li>meist Gedichte, aber auch Prosa oder Rap</li>
+          <li>freier Vortrag ohne Requisiten oder Kostüme</li>
+          <li>Publikum bewertet, Zeitlimit meist 3 bis 6 Minuten</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>eigener Text</li>
+          <li>Vortrag mit Betonung, Rhythmus, Mimik</li>
+          <li>Bewertung durch Publikum oder Jury</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>persönlicher Stil</li>
+          <li>Wortspiele, Reime, Rhythmus</li>
+          <li>freier Vortrag</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Beim Poetry Slam zählen Text und Vortrag gleichermaßen.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Kreativ-sprachlich · KI-Nutzung: Optional (mit KI-Logbuch) · Dauer/Umfang: 5–8 Min. · Sozialform: Einzel</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Fachliche Inhalte werden in einem selbst geschriebenen Slam-Text kreativ aufbereitet und vorgetragen. KI ist optional und wird im Logbuch dokumentiert.</div>
+      <a href="raster/05-poetry-slam.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="13" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">14</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Präsentation</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>mündlicher Vortrag zu einem fachlichen Thema, meist mit visueller Unterstützung (Folien, Plakat)</li>
+          <li>vermittelt Inhalte strukturiert und zielgerichtet an ein Publikum</li>
+          <li>kombiniert freies Sprechen mit visuellen Hilfsmitteln</li>
+          <li>endet häufig mit einer Fragerunde</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Aufbau</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Einleitung: Thema und Gliederung</li>
+          <li>Hauptteil: Inhalte strukturiert vorgestellt</li>
+          <li>Schluss: Zusammenfassung und Fazit</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>klare Gliederung</li>
+          <li>Blickkontakt zum Publikum</li>
+          <li>visuelle Unterstützung sinnvoll eingesetzt</li>
+          <li>freies Sprechen statt Ablesen</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Eine Präsentation trägt Inhalte strukturiert vor und macht sie durch Visualisierung greifbar.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Mündlich · KI-Nutzung: Optional (mit KI-Logbuch) · Dauer/Umfang: 8–12 Min. · Sozialform: Einzel oder Gruppe</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Schülerinnen und Schüler stellen ein fachliches Thema in einem strukturierten Vortrag mit visueller Unterstützung vor. KI optional, mit Logbuch.</div>
+      <a href="raster/14-praesentation.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+
+  <section class="page" data-idx="14" style="width:100%;max-width:1000px;margin:0 auto;box-sizing:border-box;padding:56px 72px;background:oklch(98.5% 0.006 60);color:oklch(22% 0.01 60);font-family:'Helvetica Neue',Arial,sans-serif;display:flex;flex-direction:column;min-height:600px;display:none;">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-bottom:3px solid oklch(60% 0.15 30);padding-bottom:20px;margin-bottom:36px;">
+      <span style="font-family:Georgia,serif;font-size:22px;color:oklch(60% 0.15 30);">15</span>
+      <h1 style="font-family:Georgia,serif;font-size:40px;font-weight:400;margin:0;letter-spacing:-0.5px;">Talkshow / Simulation</h1>
+      <span style="font-size:16px;color:oklch(45% 0.02 60);">Kurzdefinition für den Einstieg</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Definition</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Nachspielen einer Situation in verteilten Rollen</li>
+          <li>Teilnehmende übernehmen Perspektiven: Personen, Interessengruppen</li>
+          <li>simuliert reale oder fiktive Szenarien</li>
+          <li>fördert Empathie und Perspektivwechsel</li>
+        </ul>
+      </div>
+      <div>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Ablauf</h2>
+        <ul style="margin:0 0 32px;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Rollen verteilen und vorbereiten</li>
+          <li>Szene spielen / simulieren</li>
+          <li>Reflexion und Auswertung</li>
+        </ul>
+        <h2 style="font-size:20px;font-weight:700;margin:0 0 16px;color:oklch(60% 0.15 30);">Merkmale</h2>
+        <ul style="margin:0;padding-left:22px;font-size:18px;line-height:1.7;">
+          <li>Perspektivwechsel</li>
+          <li>Improvisation</li>
+          <li>klare Rahmenbedingungen: Setting, Ziel</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:36px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);font-size:14px;color:oklch(50% 0.02 60);">
+      Merksatz: Im Rollenspiel wird eine fremde Perspektive selbst erlebt.
+    </div>
+    
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid oklch(88% 0.01 60);">
+      <div style="font-size:12px;color:oklch(45% 0.02 60);margin-bottom:6px;">Mündlich-szenisch · KI-Nutzung: Nein · Dauer/Umfang: 10–20 Min. · Sozialform: Gruppe</div>
+      <div style="font-size:15px;line-height:1.6;max-width:640px;margin-bottom:16px;">Die Gruppe übernimmt verschiedene Rollen und diskutiert ein fachliches Problem aus unterschiedlichen Perspektiven. Kein KI-Einsatz.</div>
+      <a href="raster/10-rollenspiel-simulation.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:8px;background:oklch(60% 0.15 30);color:white;text-decoration:none;font-size:15px;font-weight:700;">Bewertungsraster herunterladen (PDF)</a>
+    </div>
+  </section>
+</div>
+<div id="navbar">
+  <button id="prevBtn" onclick="stepPage(-1)">&larr; Zurück</button>
+  <span id="counter">1 / 16</span>
+  <button id="nextBtn" onclick="stepPage(1)">Weiter &rarr;</button>
+</div>
+<script>
+  var order = ['pitch'].concat(Array.from({length: 15}, function(_, i) { return i; }));
+  var current = -1;
+  function showOverview() {
+    current = -1;
+    document.querySelectorAll('.page').forEach(function(p) { p.style.display = 'none'; });
+    document.getElementById('overview').style.display = 'block';
+    document.getElementById('navbar').style.display = 'none';
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      var isPitch = b.dataset.idx === 'pitch';
+      b.style.background = isPitch ? 'oklch(96% 0.03 300)' : 'oklch(98.5% 0.006 60)';
+      b.style.color = isPitch ? 'oklch(40% 0.19 300)' : 'oklch(30% 0.01 60)';
+    });
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  function showPage(idx) {
+    var pos = order.indexOf(idx);
+    if (pos === -1) return;
+    document.getElementById('overview').style.display = 'none';
+    document.getElementById('navbar').style.display = 'flex';
+    document.querySelectorAll('.page').forEach(function(p) { p.style.display = 'none'; });
+    document.querySelector('.page[data-idx="' + idx + '"]').style.display = 'flex';
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      var active = b.dataset.idx == idx;
+      var isPitch = b.dataset.idx === 'pitch';
+      if (isPitch) {
+        b.style.background = active ? 'oklch(58% 0.19 300)' : 'oklch(96% 0.03 300)';
+        b.style.color = active ? 'white' : 'oklch(40% 0.19 300)';
+      } else {
+        b.style.background = active ? 'oklch(60% 0.15 30)' : 'oklch(98.5% 0.006 60)';
+        b.style.color = active ? 'white' : 'oklch(30% 0.01 60)';
+      }
+    });
+    document.getElementById('counter').textContent = (pos+1) + ' / ' + order.length;
+    document.getElementById('prevBtn').disabled = pos === 0;
+    document.getElementById('nextBtn').disabled = pos === order.length - 1;
+    current = pos;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  function stepPage(delta) {
+    var newPos = current + delta;
+    if (newPos < 0 || newPos >= order.length) return;
+    showPage(order[newPos]);
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') stepPage(1);
+    if (e.key === 'ArrowLeft') stepPage(-1);
+  });
+  var sdgColors = ['#E5243B','#DDA63A','#4C9F38','#C5192D','#FF3A21','#26BDE2','#FCC30B','#A21942','#FD6925','#DD1367','#FD9D24','#BF8B2E','#3F7E44','#0A97D9','#56C02B','#00689D','#19486A'];
+  ['sdg-topbar','sdg-bg'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.innerHTML = sdgColors.map(function(c) { return '<span style="background:' + c + ';"></span>'; }).join('');
+  });
+  showOverview();
+</script>
+</body>
+</html>

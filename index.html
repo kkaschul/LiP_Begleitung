@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Lernen in Projekten – Begleitung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; text-wrap: pretty; }
+  body { margin: 0; background: oklch(94% 0.005 60); font-family: 'Helvetica Neue', Arial, sans-serif; color: oklch(22% 0.01 60); }
+  a { color: oklch(60% 0.15 30); }
+  a:hover { color: oklch(50% 0.15 30); }
+  #sdg-topbar { position: fixed; top: 0; left: 0; right: 0; height: 6px; display: flex; z-index: 20; }
+  #sdg-topbar span { flex: 1 1 0; }
+  #sdg-bg { position: fixed; inset: 0; z-index: -1; display: flex; opacity: 0.05; pointer-events: none; }
+  #sdg-bg span { flex: 1 1 0; }
+  main { max-width: 1000px; margin: 0 auto; padding: 60px 24px 20px; }
+  h1 { font-family: Georgia, serif; font-weight: 400; font-size: 36px; margin: 6px 0 8px; }
+  p.sub { font-size: 15px; color: oklch(45% 0.02 60); margin: 0 0 28px; }
+  #downloadAll { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 40px; padding: 12px 22px; border-radius: 8px; background: oklch(60% 0.15 30); color: white; text-decoration: none; font-size: 15px; font-weight: 700; }
+  h2.section { font-family: Georgia, serif; font-weight: 400; font-size: 26px; color: oklch(22% 0.01 60); margin: 44px 0 18px; padding-top: 24px; border-top: 1px solid oklch(88% 0.01 60); }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .card { display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; background: oklch(98.5% 0.006 60); border: 1px solid oklch(88% 0.01 60); border-radius: 10px; padding: 18px 22px; transition: border-color .15s; }
+  .card:hover { border-color: oklch(60% 0.15 30); }
+  .num { font-family: Georgia, serif; font-size: 18px; color: oklch(60% 0.15 30); flex: 0 0 auto; width: 26px; }
+  .card .label { font-size: 16px; font-weight: 700; }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+  @media print { #sdg-topbar, #sdg-bg { display: none; } }
+</style>
+</head>
+<body>
+<div id="sdg-topbar"></div>
+<div id="sdg-bg"></div>
+<main>
+  <h1>Lernen in Projekten – Begleitung</h1>
+  <p class="sub">Alle Materialien zum Projektlernen auf einer Seite.</p>
+  <a id="downloadAll" href="Projektzeit-Gesamt.zip" download>Alles herunterladen (ZIP mit allen Unterlagen)</a>
+
+  <div class="grid">
+    <a class="card" href="dokumente/begleitung/ablauf.pdf" target="_blank"><span class="num">01</span><span class="label">Ablauf</span></a>
+    <a class="card" href="dokumente/begleitung/faq.pdf" target="_blank"><span class="num">02</span><span class="label">FAQ</span></a>
+    <a class="card" href="dokumente/begleitung/inputauswertung.pdf" target="_blank"><span class="num">03</span><span class="label">Inputauswertung</span></a>
+    <a class="card" href="dokumente/begleitung/ki-nutzung.pdf" target="_blank"><span class="num">04</span><span class="label">KI-Nutzung</span></a>
+    <a class="card" href="dokumente/begleitung/dokumentation.pdf" target="_blank"><span class="num">05</span><span class="label">Dokumentation</span></a>
+    <a class="card" href="dokumente/begleitung/handlungssituation-erkennen.pdf" target="_blank"><span class="num">06</span><span class="label">Handlungssituation erkennen</span></a>
+    <a class="card" href="dokumente/begleitung/interview.pdf" target="_blank"><span class="num">07</span><span class="label">Interview</span></a>
+    <a class="card" href="dokumente/begleitung/problemstellung-formulieren.pdf" target="_blank"><span class="num">08</span><span class="label">Problemstellung formulieren</span></a>
+    <a class="card" href="dokumente/begleitung/projektauftrag.pdf" target="_blank"><span class="num">09</span><span class="label">Projektauftrag</span></a>
+    <a class="card" href="dokumente/begleitung/meilenstein.pdf" target="_blank"><span class="num">10</span><span class="label">Meilenstein</span></a>
+    <a class="card" href="dokumente/begleitung/reflexion.pdf" target="_blank"><span class="num">11</span><span class="label">Reflexion</span></a>
+    <a class="card" href="dokumente/begleitung/verteidigung.pdf" target="_blank"><span class="num">12</span><span class="label">Verteidigung</span></a>
+    <a class="card" href="dokumente/berichte.pdf" target="_blank"><span class="num">13</span><span class="label">Berichte</span></a>
+    <a class="card" href="dokumente/phasen.pdf" target="_blank"><span class="num">14</span><span class="label">Phasen</span></a>
+    <a class="card" href="dokumente/bewertung.pdf" target="_blank"><span class="num">15</span><span class="label">Bewertung</span></a>
+    <a class="card" href="dokumente/abschlussbewertung.pdf" target="_blank"><span class="num">16</span><span class="label">Abschlussbewertung</span></a>
+    <a class="card" href="dokumente/checklisten.pdf" target="_blank"><span class="num">17</span><span class="label">Checklisten</span></a>
+    <a class="card" href="dokumente/partizipationsstufen.pdf" target="_blank"><span class="num">18</span><span class="label">Partizipationsstufen</span></a>
+    <a class="card" href="dokumente/stundenorganisation.pdf" target="_blank"><span class="num">19</span><span class="label">Stundenorganisation</span></a>
+    <a class="card" href="methodenkarten.html"><span class="num">20</span><span class="label">Prüfungsformate</span></a>
+  </div>
+</main>
+
+<script>
+  var sdgColors = ['#E5243B','#DDA63A','#4C9F38','#C5192D','#FF3A21','#26BDE2','#FCC30B','#A21942','#FD6925','#DD1367','#FD9D24','#BF8B2E','#3F7E44','#0A97D9','#56C02B','#00689D','#19486A'];
+  ['sdg-topbar','sdg-bg'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.innerHTML = sdgColors.map(function(c) { return '<span style="background:' + c + ';"></span>'; }).join('');
+  });
+</script>
+</body>
+</html>
