@@ -7,6 +7,8 @@
 <style>
   * { box-sizing: border-box; text-wrap: pretty; }
   body { margin: 0; background: oklch(94% 0.005 60); font-family: 'Helvetica Neue', Arial, sans-serif; color: oklch(22% 0.01 60); }
+  #page-bg { position: fixed; inset: 0; z-index: 0; background: url('assets/hintergrund.png') center center / cover no-repeat; opacity: 0.16; pointer-events: none; }
+  main { position: relative; z-index: 1; }
   a { color: oklch(60% 0.15 30); }
   a:hover { color: oklch(50% 0.15 30); }
   #sdg-topbar { position: fixed; top: 0; left: 0; right: 0; height: 6px; display: flex; z-index: 20; }
@@ -24,10 +26,11 @@
   .num { font-family: Georgia, serif; font-size: 18px; color: oklch(60% 0.15 30); flex: 0 0 auto; width: 26px; }
   .card .label { font-size: 16px; font-weight: 700; }
   @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
-  @media print { #sdg-topbar, #sdg-bg { display: none; } }
+  @media print { #sdg-topbar, #sdg-bg, #page-bg { display: none; } }
 </style>
 </head>
 <body>
+<div id="page-bg"></div>
 <div id="sdg-topbar"></div>
 <div id="sdg-bg"></div>
 <main>
